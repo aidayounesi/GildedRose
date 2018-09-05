@@ -91,3 +91,12 @@ describe('Gilded Rose Interesting', function () {
         expect(items[0].quality).to.equal(0);
     });
 });
+
+describe('Gilded Rose New Features', function () {
+
+    it('Conjured items degrade in Quality twice as fast as normal items', function() {
+        const gildedRose = new GildedRose([new Item('Conjured', 1, 3) ]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(1);
+    });
+});
