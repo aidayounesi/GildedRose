@@ -1,7 +1,7 @@
-const Sulfuras: string = 'Sulfuras'
-const AgedBrie: string = 'Aged Brie'
-const BackstagePasses: string = 'Backstage passes'
-const Conjured: string = 'Conjured'
+const SULFURAS: string = 'Sulfuras'
+const AGED_BRIE: string = 'Aged Brie'
+const BACKSTAGE_PASSES: string = 'Backstage Passes'
+const CONJURED: string = 'Conjured'
 
 
 export class Item {
@@ -23,62 +23,63 @@ export class GildedRose {
         this.items = items;
     }
 
+
     updateQuality() {
-        for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name != AgedBrie && this.items[i].name != BackstagePasses ) {
-                if (this.items[i].quality > 0) {
-                    if (this.items[i].name != Sulfuras) {
-                        if (this.items[i].name == Conjured) {
-                            this.items[i].quality = this.items[i].quality - 2
+        this.items.forEach(element => {
+            if (element.name != AGED_BRIE && element.name != BACKSTAGE_PASSES ) {
+                if (element.quality > 0) {
+                    if (element.name != SULFURAS) {
+                        if (element.name == CONJURED && element.quality > 1) {
+                            element.quality = element.quality - 2
                         }
                         else {
-                            this.items[i].quality = this.items[i].quality - 1
+                            element.quality = element.quality - 1
                         }
                     }
                 }
             } else {
-                if (this.items[i].quality < 50) {
-                    this.items[i].quality = this.items[i].quality + 1
-                    if (this.items[i].name == BackstagePasses) {
-                        if (this.items[i].sellIn < 11) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
+                if (element.quality < 50) {
+                    element.quality = element.quality + 1
+                    if (element.name == BACKSTAGE_PASSES) {
+                        if (element.sellIn < 11) {
+                            if (element.quality < 50) {
+                                element.quality = element.quality + 1
                             }
                         }
-                        if (this.items[i].sellIn < 6) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
+                        if (element.sellIn < 6) {
+                            if (element.quality < 50) {
+                                element.quality = element.quality + 1
                             }
                         }
                     }
                 }
             }
-            if (this.items[i].name != Sulfuras) {
-                this.items[i].sellIn = this.items[i].sellIn - 1;
+            if (element.name != SULFURAS) {
+                element.sellIn = element.sellIn - 1;
             }
-            if (this.items[i].sellIn < 0) {
-                if (this.items[i].name != AgedBrie) {
-                    if (this.items[i].name != BackstagePasses) {
-                        if (this.items[i].quality > 0) {
-                            if (this.items[i].name != Sulfuras) { 
-                                if (this.items[i].name == Conjured) {
-                                    this.items[i].quality = this.items[i].quality - 2
+            if (element.sellIn < 0) {
+                if (element.name != AGED_BRIE) {
+                    if (element.name != BACKSTAGE_PASSES) {
+                        if (element.quality > 0) {
+                            if (element.name != SULFURAS) { 
+                                if (element.name == CONJURED) {
+                                    element.quality = element.quality - 2
                                 }
                                 else {
-                                    this.items[i].quality = this.items[i].quality - 1
+                                    element.quality = element.quality - 1
                                 }
                             }
                         }
                     } else {
-                        this.items[i].quality = this.items[i].quality - this.items[i].quality
+                        element.quality = element.quality - element.quality
                     }
                 } else {
-                    if (this.items[i].quality < 50) {
-                        this.items[i].quality = this.items[i].quality + 1
+                    if (element.quality < 50) {
+                        element.quality = element.quality + 1
                     }
                 }
             }
-        }
+        });
 
         return this.items;
     }
