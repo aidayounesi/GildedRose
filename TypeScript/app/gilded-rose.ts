@@ -2,7 +2,15 @@ const SULFURAS: string = 'Sulfuras'
 const AGED_BRIE: string = 'Aged Brie'
 const BACKSTAGE_PASSES: string = 'Backstage Passes'
 const CONJURED: string = 'Conjured'
+const DEFAULT: string = 'default'
 
+const updatingQualityRate = {
+    SULFURAS: 0,
+    CONJURED: -2,
+    AGED_BRIE: +1,
+    BACKSTAGE_PASSES: +1,
+    DEFAULT: -1
+}
 
 export class Item {
     name: string;
@@ -23,9 +31,8 @@ export class GildedRose {
         this.items = items;
     }
 
-
     updateQuality() {
-        this.items.forEach(element => {
+        this.items.forEach( element => {
             if (element.name != AGED_BRIE && element.name != BACKSTAGE_PASSES ) {
                 if (element.quality > 0) {
                     if (element.name != SULFURAS) {
@@ -37,7 +44,8 @@ export class GildedRose {
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 if (element.quality < 50) {
                     element.quality = element.quality + 1
                     if (element.name == BACKSTAGE_PASSES) {
@@ -62,7 +70,7 @@ export class GildedRose {
                     if (element.name != BACKSTAGE_PASSES) {
                         if (element.quality > 0) {
                             if (element.name != SULFURAS) { 
-                                if (element.name == CONJURED) {
+                                if (element.name == CONJURED && element.quality > 1) {
                                     element.quality = element.quality - 2
                                 }
                                 else {
@@ -70,10 +78,12 @@ export class GildedRose {
                                 }
                             }
                         }
-                    } else {
+                    } 
+                    else {
                         element.quality = element.quality - element.quality
                     }
-                } else {
+                } 
+                else {
                     if (element.quality < 50) {
                         element.quality = element.quality + 1
                     }
