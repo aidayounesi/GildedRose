@@ -134,11 +134,17 @@ describe('Gilded Rose - Degradable items (not aged brie or sulfuras or backstage
     });
 });
 
-describe('Gilded Rose New Features', function () {
+describe('Gilded Rose - Conjured', function () {
+    const initSellIn = 2;
+    const initQuality = 3;
+    var conjured;
+
+    beforeEach(() => {
+        conjured = new GildedRose([new Item('Conjured', initSellIn, initQuality)]);
+    });
 
     it('Conjured items degrade in Quality twice as fast as normal items', () => {
-        const gildedRose = new GildedRose([new Item('Conjured', 1, 3) ]);
-        const items = gildedRose.updateQuality();
-        expect(items[0].quality).to.equal(1);
+        const items = conjured.updateQuality();
+        expect(items[0].quality).to.equal(initQuality - 2);
     });
 });
