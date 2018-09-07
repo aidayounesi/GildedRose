@@ -2,15 +2,6 @@ const SULFURAS: string = 'Sulfuras'
 const AGED_BRIE: string = 'Aged Brie'
 const BACKSTAGE_PASSES: string = 'Backstage Passes'
 const CONJURED: string = 'Conjured'
-const DEFAULT: string = 'default'
-
-const updatingQualityRate = {
-    SULFURAS: 0,
-    CONJURED: -2,
-    AGED_BRIE: +1,
-    BACKSTAGE_PASSES: +1,
-    DEFAULT: -1
-}
 
 export class Item {
     name: string;
@@ -23,7 +14,6 @@ export class Item {
         this.quality = quality;
     }
 }
-
 export class GildedRose {
     items: Array<Item>;
 

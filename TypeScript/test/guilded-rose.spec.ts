@@ -10,7 +10,7 @@ const assertQualityAsExpected = ((itemName, initialSellIn, initialQuality, expec
 });
 
 describe('Gilded Rose - Basics', function () {
-    it('All items have a SellIn value as a number', () =>{
+        it('All items have a SellIn value as a number', () =>{
         const gildedRose = new GildedRose([new Item('basic', 1, 3) ]);
         const items = gildedRose.updateQuality();
         expect(typeof items[0].sellIn).to.equal("number");
@@ -21,17 +21,10 @@ describe('Gilded Rose - Basics', function () {
         const items = gildedRose.updateQuality();
         expect(typeof items[0].quality).to.equal("number");
     });
-
-    it('At the end of each day our system lowers SellIn value', () =>{
-        const gildedRose = new GildedRose([new Item('basic', 1, 3)]);
-        const items = gildedRose.updateQuality();
-        expect(items[0].sellIn).to.not.above(1);
-    });
-
-    it('At the end of each day our system lowers Quality value', () =>{
-        const gildedRose = new GildedRose([new Item('basic', 1, 3)]);
-        const items = gildedRose.updateQuality();
-        expect(items[0].quality).to.not.above(3);
+    
+    it('Empty items of gilded rose', () =>{
+        const gildedRose = new GildedRose();
+        expect(gildedRose.updateQuality()).to.be.empty;
     });
 });
 
@@ -79,6 +72,12 @@ describe('Gilded Rose - Sulfuras', () => {
         const items = sulfuras.updateQuality(); 
         expect(items[0].quality).to.equal(3);
     });
+    
+    it('Sulfuras never has to decrease in Quality', () => {
+        let sulfuras = new GildedRose([new Item('Sulfuras', -1, 3)]);
+        const items = sulfuras.updateQuality(); 
+        expect(items[0].quality).to.equal(3);
+    });
 });
 
 describe('Gilded Rose - Aged Brie', () => {
@@ -87,16 +86,9 @@ describe('Gilded Rose - Aged Brie', () => {
         const items = agedBrie.updateQuality(); 
         expect(items[0].quality).to.equal(4);
     });
-
-    it('Aged Brie actually increases in Quality the older it gets, twice faster when SellIn has passed', () => {
-        let agedBrie = new GildedRose([new Item('Aged Brie', 0, 3)]);
-        const items = agedBrie.updateQuality(); 
-        expect(items[0].quality).to.equal(5);
-    });
 });
 
 describe('Gilded Rose - Backstage Passes', () => {
-    
     it('Backstage passes increases in Quality by 3 when there are when there are 5 days or less', () => {
         assertQualityAsExpected('Backstage Passes', 2, 10, 13);
     });
@@ -113,6 +105,10 @@ describe('Gilded Rose - Backstage Passes', () => {
         assertQualityAsExpected('Backstage Passes', 8, 49, 50);
     });
 
+    it('Backstage passes increases in Quality by 1 when there are more than 10 days', () => {
+        assertQualityAsExpected('Backstage Passes', 12, 10, 11);
+    });
+
     it('Backstage passes Quality drops to 0 after the concert', () => {
         assertQualityAsExpected('Backstage Passes', 0, 10, 0);
     });
@@ -122,9 +118,13 @@ describe('Gilded Rose - Conjured', function () {
     it('Conjured items degrade in Quality twice as fast as normal items', () => {
         assertQualityAsExpected('Conjured', 2, 5, 3);
     });
+    
+    it('Conjured items degrade in Quality twice as fast as normal items, Quality should not be below zero', () => {
+        assertQualityAsExpected('Conjured', 2, 1, 0);
+    });
 });
 
-describe('Gilded Rose - Degradable items (not aged brie or sulfuras or backstage passes)', function () {
+describe('Gilded Rose - Degradable items (not any of sulfuras or backstage passes)', function () {
 
     it('Once the sell by date of a Normal item has not passed, Quality degrades normally', () => {
         assertQualityAsExpected('normal', 1, 5, 4);
@@ -138,16 +138,23 @@ describe('Gilded Rose - Degradable items (not aged brie or sulfuras or backstage
         assertQualityAsExpected('normal', 0, 5, 3);
     });
 
-    it('Once the sell by date of Conjured has passed, Quality degrades twice as fast', ()  => {
-        assertQualityAsExpected('Conjured', 0, 5, 1);
-    });
-    
     it('Once the sell by date of a normal has passed, Quality degrades twice as fast, considering Quality cannot be negative', ()  => {
         assertQualityAsExpected('normal', 0, 1, 0);
     });
-    
-    it('Once the sell by date of Conjured has passed, Quality degrades twice as fast, considering Quality cannot be negative', ()  => {
-        assertQualityAsExpected('Conjured', 0, 1, 0);
+
+    it('Once the sell by date of Conjured has passed, Quality degrades twice as fast', ()  => {
+        assertQualityAsExpected('Conjured', 0, 5, 1);
     });
 
+    it('Once the sell by date of Conjured has passed, Quality degrades twice as fast, considering Quality cannot be negative', ()  => {
+        assertQualityAsExpected('Conjured', 0, 3, 0);
+    });
+
+    it('Aged Brie actually increases in Quality the older it gets, twice faster when SellIn has passed', () => {
+        assertQualityAsExpected('Aged Brie', 0, 3, 5);
+    });
+    
+    it('Aged Brie actually increases in Quality the older it gets, twice faster when SellIn has passed, not greater than 50', () => {
+        assertQualityAsExpected('Aged Brie', 0, 49, 50);
+    });
 });
